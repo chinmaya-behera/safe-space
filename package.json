@@ -1,0 +1,22 @@
+{
+  "name": "safe-space",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Safe Space login backend and SQLite database",
+  "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env src/server.js",
+    "dev": "node --env-file-if-exists=.env --watch src/server.js",
+    "test": "node --test",
+    "db:init": "node --env-file-if-exists=.env scripts/database.js init",
+    "db:status": "node --env-file-if-exists=.env scripts/database.js status",
+    "db:backup": "node --env-file-if-exists=.env scripts/database.js backup"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "helmet": "^8.3.0"
+  }
+}
