@@ -10,35 +10,39 @@ const careHTML=`<div class="care"><b>Thank you for sharing this. That took coura
 
 /* ---------- navigation ---------- */
 const views={help:helpHome,cope:copeHome,jour:jourWrite};
-function go(v){stop();window.safeSpaceChat?.hide();window.safeSpaceJournal?.unmount();document.querySelector('.app').classList.toggle('journaling',v==='jour');document.querySelector('.app').classList.toggle('coping',v==='cope');if(accountScope)history.replaceState(null,'',location.pathname+(v==='jour'?'#journal':v==='cope'?'#coping':''));$('chat').classList.remove('open');document.querySelector('.app').classList.remove('chatting');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));views[v]();main.scrollTop=0}
+function go(v){stop();window.safeSpaceChat?.hide();window.safeSpaceJournal?.unmount();document.querySelector('.app').classList.toggle('journaling',v==='jour');document.querySelector('.app').classList.toggle('coping',v==='cope');document.querySelector('.app').classList.toggle('helping',v==='help');if(accountScope)history.replaceState(null,'',location.pathname+(v==='jour'?'#journal':v==='cope'?'#coping':''));$('chat').classList.remove('open');document.querySelector('.app').classList.remove('chatting');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));views[v]();main.scrollTop=0}
 document.querySelectorAll('nav button[data-v]').forEach(b=>b.onclick=()=>go(b.dataset.v));
 
 /* ---------- HELP NOW ---------- */
 let C=st.get('hn_contacts',[]);
 const DEF=[['Emergency services','112','Police · Ambulance','em'],['Tele-MANAS','14416','Free mental health support · 24/7',''],['iCall','9152987821','Counselling helpline',''],['AASRA','+919820466726','Suicide prevention helpline','']];
+const HELP_ICONS={phone:'<path d="M22 16.9v3a2 2 0 0 1-2.2 2A20 20 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7l.5 3a2 2 0 0 1-.6 1.7L7.7 9.7a16 16 0 0 0 6.6 6.6l1.3-1.3a2 2 0 0 1 1.7-.6l3 .5a2 2 0 0 1 1.7 2Z"/>',people:'<circle cx="9" cy="8" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3m2-16a3 3 0 0 1 0 6m4 10v-3a6 6 0 0 0-4-5"/>',arrow:'<path d="M5 12h14m-5-5 5 5-5 5"/>',shield:'<path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6z"/><path d="m8 12 3 3 5-6"/>',message:'<path d="M21 11a8 8 0 0 1-8 8H6l-4 3 1-6a8 8 0 1 1 18-5Z"/><path d="M7 9h10M7 13h6"/>'};
+const helpIcon=id=>`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${HELP_ICONS[id]}</svg>`;
+const helpCall=d=>`<a class="help-call ${d[3]}" href="tel:${d[1]}"><span class="help-icon">${helpIcon(d[3]==='em'?'shield':'phone')}</span><span class="help-call-copy"><b>${d[0]}</b><small>${d[2]}</small></span><span class="help-call-number">${d[1]}</span>${helpIcon('arrow')}</a>`;
 function helpHome(){stop();
- main.innerHTML=`<h1>Help Now</h1><p class="sub">If you are in extreme pain or thinking of ending your life, press the button. Help is one tap away.</p>
- <button class="sos" id="sos">I NEED HELP NOW<small>Tap to see who to call</small></button>
- <button class="link" id="set">⚙️ My trusted contacts (${C.length} saved)</button>
- <p class="note">Save your trusted people while you feel steadier so they are ready in a hard moment. Contacts stay on this device only. Verify helpline numbers for your region.</p>`;
- $('sos').onclick=crisis;$('set').onclick=contacts}
+ main.innerHTML=`<section class="help-page" aria-labelledby="help-title"><div class="help-heading"><div class="help-eyebrow"><i></i> YOU DON’T HAVE TO DO THIS ALONE</div><h1 id="help-title">Help Now<span>One step toward support.</span></h1><p>If you are in extreme pain or thinking of ending your life, reach out. Help is one tap away.</p></div>
+ <button class="help-primary" id="sos"><span class="help-primary-icon">${helpIcon('phone')}</span><span><b>I need help now</b><small>See helplines and your trusted people</small></span>${helpIcon('arrow')}</button>
+ <div class="help-section-label"><span>CALL DIRECTLY</span><span>Support when you need it</span></div><div class="help-quick-grid"><a class="help-quick" href="tel:112"><span class="help-icon">${helpIcon('shield')}</span><span><b>112</b><small>Emergency services</small><em>In immediate danger? Call now.</em></span>${helpIcon('arrow')}</a><a class="help-quick" href="tel:14416"><span class="help-icon">${helpIcon('phone')}</span><span><b>14416</b><small>Tele-MANAS</small><em>Free mental health support · 24/7</em></span>${helpIcon('arrow')}</a></div>
+ <button class="help-contacts-link" id="set"><span class="help-icon">${helpIcon('people')}</span><span><b>My trusted contacts</b><small>People you can turn to in a hard moment</small></span><span class="help-count">${C.length} saved</span>${helpIcon('arrow')}</button>
+ <p class="help-note">Save your trusted people while you feel steadier.<br>Contacts stay on this device only. Verify helpline numbers for your region.</p></section>`;
+ $('sos').onclick=crisis;$('set').onclick=contacts;main.scrollTop=0}
 function crisis(){stop();
- const mine=C.map(c=>`<a class="call me" href="tel:${clean(c.p)}"><div>${esc(c.n)}<span>Your trusted person · tap to call</span></div><b>📞</b></a>`).join('');
- const txt=C.length?`<a class="txt" href="sms:${clean(C[0].p)}?body=${encodeURIComponent("I'm not okay right now and I need you. Please call me or come be with me.")}">💬 Text ${esc(C[0].n)}: “I'm not okay, please call me”</a>`:'';
- main.innerHTML=`<button class="back" id="bk">← Back</button><h1>You reached out. That matters.</h1><p class="sub">You don't have to go through this alone. Call someone right now.</p>
- ${DEF.slice(0,2).map(d=>`<a class="call ${d[3]}" href="tel:${d[1]}"><div>${d[0]}<span>${d[2]}</span></div><b>${d[1]}</b></a>`).join('')}
- ${mine||'<p class="center meta">No trusted contacts saved yet. Add them from the Help Now home screen.</p>'}${txt}
- ${DEF.slice(2).map(d=>`<a class="call" href="tel:${d[1]}"><div>${d[0]}<span>${d[2]}</span></div><b>📞</b></a>`).join('')}
- <div class="card"><h2>While you wait for help</h2><ol><li>Move away from anything you could use to hurt yourself.</li><li>Go to a room with other people, or step outside.</li><li>Stay on the phone with someone. You only need to get through the next few minutes.</li></ol></div>
- <div class="card center"><h2>Breathe with me</h2><div class="orb" id="o">Ready</div><button class="btn" id="b">Start</button></div>`;
- $('bk').onclick=helpHome;$('b').onclick=e=>{stop();const o=$('o');let n=0;const s=()=>{const i=n%2===0;o.style.transform=i?'scale(1.45)':'scale(1)';o.textContent=i?'In…':'Out…';n++};s();timer=setInterval(s,4500);e.target.textContent='Restart'}}
-function contacts(){
- main.innerHTML=`<button class="back" id="bk">← Back</button><h1>My trusted contacts</h1><p class="sub">People who care about you. They appear at the top when you press Help Now.</p>
- <div class="card">${C.length?C.map((c,i)=>`<div class="row"><div><b>${esc(c.n)}</b><br><span class="meta">${esc(c.p)}</span></div><button class="btn alt sm" data-i="${i}">Remove</button></div>`).join(''):'<p class="meta" style="margin:0">None saved yet.</p>'}</div>
- <div class="card"><h2>Add a person</h2><label>Name (e.g. Mom, Priya)</label><input id="n" autocomplete="off"><label>Phone number</label><input id="p" type="tel" inputmode="tel" autocomplete="off"><button class="btn" id="a">Save contact</button><p id="m" class="meta"></p></div>`;
+ const mine=C.map(c=>`<a class="help-call" href="tel:${clean(c.p)}"><span class="help-icon">${helpIcon('people')}</span><span class="help-call-copy"><b>${esc(c.n)}</b><small>Your trusted person · tap to call</small></span>${helpIcon('phone')}</a>`).join('');
+ const txt=C.length?`<a class="help-text" href="sms:${clean(C[0].p)}?body=${encodeURIComponent("I'm not okay right now and I need you. Please call me or come be with me.")}">${helpIcon('message')}<span>Text ${esc(C[0].n)}: “I'm not okay, please call me”</span></a>`:'';
+ main.innerHTML=`<section class="help-page help-detail"><button class="back" id="bk">← Back to Help Now</button><div class="help-heading"><div class="help-eyebrow"><i></i> TAKE THE NEXT SMALL STEP</div><h1>You reached out.<span>That matters.</span></h1><p>You don't have to go through this alone. Call someone right now.</p></div>
+ <div class="help-call-list">${DEF.slice(0,2).map(helpCall).join('')}</div><div class="help-section-label"><span>YOUR TRUSTED PEOPLE</span></div>
+ ${mine||'<div class="help-empty"><span class="help-icon">'+helpIcon('people')+'</span><p>No trusted contacts saved yet.<span>Add someone you can turn to in a hard moment.</span></p><button class="btn alt" id="add-trusted">Add a contact</button></div>'}${txt}
+ <div class="help-section-label"><span>MORE PEOPLE TO TALK TO</span></div><div class="help-call-list">${DEF.slice(2).map(helpCall).join('')}</div>
+ <div class="help-wait-grid"><div class="card"><h2>While you wait for help</h2><ol><li>Move away from anything you could use to hurt yourself.</li><li>Go to a room with other people, or step outside.</li><li>Stay on the phone with someone. You only need to get through the next few minutes.</li></ol></div>
+ <div class="card center help-breathe"><h2>Breathe with me</h2><div class="orb" id="o" role="status">Ready</div><button class="btn" id="b">Start</button></div></div></section>`;
+ $('bk').onclick=()=>{helpHome();main.scrollTop=0};$('add-trusted')?.addEventListener('click',contacts);$('b').onclick=e=>{stop();const o=$('o');let n=0;const s=()=>{const i=n%2===0;o.style.transform=i?'scale(1.45)':'scale(1)';o.textContent=i?'In…':'Out…';n++};s();timer=setInterval(s,4500);e.target.textContent='Restart'};main.scrollTop=0}
+function contacts(){stop();
+ main.innerHTML=`<section class="help-page help-detail"><button class="back" id="bk">← Back to Help Now</button><div class="help-heading"><div class="help-eyebrow"><i></i> YOUR CIRCLE OF SUPPORT</div><h1>My trusted contacts</h1><p>People who care about you. They appear alongside the helplines when you press Help Now.</p></div>
+ <div class="help-section-label"><span>YOUR PEOPLE</span><span>${C.length} / 5 saved</span></div><div class="card help-saved">${C.length?C.map((c,i)=>`<div class="row"><span class="help-icon">${helpIcon('people')}</span><div><b>${esc(c.n)}</b><br><span class="meta">${esc(c.p)}</span></div><button class="btn alt sm" data-i="${i}" aria-label="Remove ${esc(c.n)}">Remove</button></div>`).join(''):'<div class="help-empty"><span class="help-icon">'+helpIcon('people')+'</span><p>Your circle starts with one person.<span>Add someone you feel safe reaching out to.</span></p></div>'}</div>
+ <div class="card help-contact-form"><h2>Add a person</h2><p>A familiar voice can make a hard moment feel less lonely.</p><label for="n">Name (e.g. Mom, Priya)</label><input id="n" maxlength="100" autocomplete="off" placeholder="Someone you trust"><label for="p">Phone number</label><input id="p" type="tel" inputmode="tel" autocomplete="off" placeholder="Their phone number"><button class="btn" id="a">Save contact</button><p id="m" class="meta" role="status"></p></div><p class="help-note">Your contacts are saved for this account on this device only.</p></section>`;
  $('bk').onclick=helpHome;
  main.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{C.splice(+b.dataset.i,1);st.set('hn_contacts',C);contacts()});
- $('a').onclick=()=>{const n=$('n').value.trim(),p=$('p').value.trim();if(!n||clean(p).length<5){$('m').textContent='Please enter a name and a valid number.';return}if(C.length>=5){$('m').textContent='You can save up to 5 contacts.';return}C.push({n,p});st.set('hn_contacts',C);contacts()}}
+ $('a').onclick=()=>{const n=$('n').value.trim(),p=$('p').value.trim();if(!n||clean(p).length<5){$('m').textContent='Please enter a name and a valid number.';return}if(C.length>=5){$('m').textContent='You can save up to 5 contacts.';return}C.push({n,p});st.set('hn_contacts',C);contacts()};main.scrollTop=0}
 
 /* ---------- COPING LIBRARY ---------- */
 const LIB=[['breath','Slow breathing','2 min · settle your body',breathing],['ground','5-4-3-2-1 grounding','3 min · come back to the room',ground],['wait','Wait 15 minutes','Let the intensity pass',wait],['safe','Make your space safer','Create distance from danger',safer],['reach','Reach out to one person','You don’t have to carry this alone',reach],['body','Gentle body release','Relax tight muscles, step by step',body],['kind','Talk to yourself like a friend','A softer inner voice',kind],['plan','My reasons & my plan','Saved only on this device',plan]];
@@ -114,7 +118,7 @@ Safety: if they mention suicide, self-harm, a plan, or hopelessness, respond cal
 Respond only with your message to the person.`;
 window.safeSpaceChatContext={system:SYSTEM,isRisk:text=>RISK.test(text)};
 function openChat(){
- stop();window.safeSpaceJournal?.unmount();document.querySelector('.app').classList.remove('journaling','coping');
+ stop();window.safeSpaceJournal?.unmount();document.querySelector('.app').classList.remove('journaling','coping','helping');
  $('chat').classList.add('open');document.querySelector('.app').classList.add('chatting');
  if(accountScope)history.replaceState(null,'',location.pathname+'#chat');
  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.id==='chatnav'));

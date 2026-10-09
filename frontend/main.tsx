@@ -7,6 +7,7 @@ import './styles.css';
 import './journal.css';
 import './chat.css';
 import './coping.css';
+import './help.css';
 
 let journalRoot: Root | null = null;
 window.safeSpaceJournal = {

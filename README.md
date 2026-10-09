@@ -49,6 +49,10 @@ Conversations and unfinished chat drafts survive navigation during the current p
 
 The design reference's command examples are adapted to the actual support tools. Attachment uploads and design-generation actions are outside this integration. Local checks cover message sending, multiline input, mobile layout and shortcut navigation; automated tests exercise streaming with a mock provider, fallback replies, timeout recovery and account isolation.
 
+## Help Now
+
+Help Now, the helpline directory and trusted contacts share the coping library's monochrome charcoal-and-gray theme. A prominent support button opens all existing helplines and saved contacts; the home screen also offers direct emergency and Tele-MANAS call links. The directory keeps trusted-person call/text links, safety guidance and a breathing guide. Contact fields have accessible labels, and the layout adapts to mobile screens and reduced-motion preferences. Existing account-specific contacts stay in the same browser storage.
+
 ## Coping library
 
 Open **http://localhost:3000/#coping** after signing in. The library and all eight exercises use a monochrome charcoal-and-gray palette, rounded cards, outline icons and restrained motion to match the chat and journal layouts. The toolkit adapts to small screens; grounding and body-release exercises show step progress, and breathing keeps its expanding guide. Keyboard focus is visible and animations respect reduced-motion preferences.

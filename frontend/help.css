@@ -1,0 +1,82 @@
+/* Help Now uses the same neutral shell and controls as the coping library. */
+.help-page{max-width:760px;margin:0 auto}
+.help-heading{padding:34px 0 25px}
+.help-eyebrow{display:flex;align-items:center;gap:8px;font:10px/1.5 ui-monospace,Consolas,monospace;letter-spacing:1.5px;color:#a0a0aa}
+.help-eyebrow i{height:5px;width:5px;border-radius:50%;background:#b8b8c0}
+.help-heading p{font-size:12px;line-height:1.85;color:#a8a8b3;max-width:500px;margin:0}
+.help-primary{display:flex;align-items:center;gap:18px;width:100%;text-align:left;border:1px solid #ffffff18;border-radius:18px;background:#ddddE4;color:#191920;padding:24px;font:inherit;cursor:pointer;transition:background .2s,transform .2s;box-shadow:0 8px 28px #0002}
+.help-primary:hover{background:#f0f0f3;transform:translateY(-2px)}
+.help-primary:active{transform:translateY(0)}
+.help-primary-icon{width:46px;height:46px;border:1px solid #1b1b2222;border-radius:14px;background:#1b1b2205;display:grid;place-items:center;flex-shrink:0}
+.help-primary>span:nth-child(2){flex:1}
+.help-primary b{display:block;font-size:22px;font-weight:550;letter-spacing:-.6px;line-height:1.35}
+.help-primary small{display:block;font-size:12px;color:#51515d;margin-top:4px}
+.help-section-label{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#a0a0aa;font-size:10px;margin:26px 0 14px}
+.help-section-label>span:first-child{font:9px ui-monospace,Consolas,monospace;letter-spacing:1.2px}
+.help-icon{width:36px;height:36px;border:1px solid #ffffff10;border-radius:11px;background:#ffffff03;color:#c2c2ce;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.help-quick-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.help-quick{display:flex;align-items:flex-start;gap:13px;padding:20px;background:#19191f;border:1px solid #ffffff0c;border-radius:16px;color:#e5e5ec;text-decoration:none;transition:background .2s,border-color .2s,transform .2s}
+.help-quick>span:nth-child(2){min-width:0;flex:1}
+.help-quick b{display:block;font:400 28px/1.3 ui-monospace,Consolas,monospace;letter-spacing:-1px}
+.help-quick small{display:block;color:#c6c6d0;font-size:12px;margin-top:4px}
+.help-quick em{display:block;color:#a0a0ac;font-style:normal;font-size:10px;line-height:1.7;margin-top:6px}
+.help-quick>svg{width:16px;height:16px;flex-shrink:0;color:#a0a0aa;margin-top:7px}
+.help-quick:hover,.help-contacts-link:hover{background:#212128;border-color:#ffffff22;transform:translateY(-2px)}
+.help-contacts-link{display:flex;align-items:center;gap:14px;width:100%;border:1px solid #ffffff0c;border-radius:16px;background:#19191f;color:#e5e5ec;text-align:left;font:inherit;padding:20px;margin-top:14px;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
+.help-contacts-link>span:nth-child(2){flex:1;min-width:0}
+.help-contacts-link b{display:block;font-size:13px;font-weight:500}
+.help-contacts-link small{display:block;font-size:11px;color:#a0a0ac;margin-top:3px}
+.help-count{font:10px ui-monospace,Consolas,monospace;color:#a0a0aa;white-space:nowrap;padding:5px 8px;border-radius:7px;background:#ffffff04}
+.help-contacts-link>svg{width:16px;height:16px;color:#a0a0aa;flex-shrink:0}
+.help-note{font-size:10px;line-height:1.85;color:#9999a5;text-align:center;margin:24px 0 6px}
+.help-detail{padding-top:19px}
+.app.helping .help-detail>.back{margin-bottom:0}
+.help-detail .help-heading{padding-top:15px}
+.help-call-list{display:flex;flex-direction:column;gap:10px}
+.help-call{display:flex;align-items:center;gap:15px;padding:18px 20px;background:#19191f;border:1px solid #ffffff0d;border-radius:15px;color:#e5e5ec;text-decoration:none;transition:background .2s,border-color .2s;min-height:80px;margin-bottom:10px}
+.help-call-list>.help-call{margin:0}
+.help-call-copy{flex:1;min-width:0}
+.help-call b{display:block;font-size:14px;font-weight:500;overflow-wrap:anywhere}
+.help-call small{display:block;font-size:11px;color:#a0a0ac;margin-top:4px}
+.help-call-number{font:12px ui-monospace,Consolas,monospace;color:#c8c8d2;white-space:nowrap}
+.help-call>svg{width:17px;height:17px;color:#9c9ca8;flex-shrink:0}
+.help-call:hover{background:#23232b;border-color:#ffffff25}
+.help-call.em{background:#dddde4;color:#191920;border-color:#ffffff18}
+.help-call.em .help-icon{background:#1b1b2205;border-color:#1b1b2222;color:#363640}
+.help-call.em :is(small,.help-call-number,svg){color:#51515d}
+.help-call.em:hover{background:#f0f0f3}
+.help-empty{display:flex;align-items:center;gap:13px;background:#ffffff02;border:1px dashed #ffffff14;border-radius:14px;padding:18px}
+.help-empty p{flex:1;font-size:12px;color:#b8b8c3;margin:0;line-height:1.7}
+.help-empty p>span{display:block;font-size:11px;color:#a0a0aa}
+.app.helping .help-empty .btn{margin:0;white-space:nowrap;font-size:11px;padding:8px 12px}
+.help-text{display:flex;align-items:center;gap:9px;color:#c6c6d0;font-size:12px;line-height:1.8;text-decoration:none;border:1px solid #ffffff10;border-radius:12px;padding:12px 16px;margin:10px 0}
+.help-text:hover{background:#ffffff05}
+.help-text>svg{width:17px;height:17px;flex-shrink:0}
+.help-text>span{overflow-wrap:anywhere}
+.help-wait-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:14px;margin-top:25px;align-items:stretch}
+.app.helping .help-wait-grid .card{padding:24px}
+.app.helping .help-wait-grid h2{font-size:20px;letter-spacing:-.5px}
+.app.helping .help-wait-grid li{font-size:12px}
+.app.helping .help-breathe .orb{width:88px;height:88px;margin:44px auto;font-size:11px}
+.app.helping .help-saved{padding:18px 22px}
+.app.helping .help-saved .help-empty{border:0;background:none;padding:8px 0}
+.app.helping .help-saved .row{gap:14px;border-color:#ffffff0b;padding:12px 0}
+.help-saved .row>div{flex:1;min-width:0;overflow-wrap:anywhere}
+.help-saved .row:last-child{border-bottom:0}
+.help-saved .row b{font-size:13px;font-weight:500}
+.help-saved .row .meta{font:11px ui-monospace,Consolas,monospace;color:#a0a0aa}
+.app.helping .help-saved .btn{margin:0;flex-shrink:0;min-height:40px;font-size:11px;padding:7px 12px}
+.app.helping .help-contact-form{margin-top:20px}
+.app.helping .help-contact-form h2{font-size:23px}
+.app.helping .help-contact-form .btn{margin-top:18px}
+.app.helping .help-contact-form input{min-height:46px;height:46px}
+.app.helping .help-contact-form #m{margin:12px 0 0}
+@media(max-width:600px){
+ .help-heading{padding:29px 0 23px}.help-eyebrow{font-size:8px;letter-spacing:1px}.help-heading p{font-size:11px}.help-primary{padding:20px 17px;gap:13px;border-radius:16px}.help-primary b{font-size:20px}.help-primary small{font-size:10px}.help-primary-icon{width:39px;height:39px;border-radius:12px}.help-primary>svg{width:17px;height:17px;flex-shrink:0}
+ .help-section-label{font-size:9px;margin-top:24px}.help-section-label>span:first-child{font-size:8px}.help-quick-grid{gap:9px}.help-quick{padding:16px 13px;gap:8px;flex-wrap:wrap;position:relative;min-height:152px}.help-quick .help-icon{width:30px;height:30px}.help-quick>span:nth-child(2){flex:0 0 100%}.help-quick>svg{position:absolute;right:14px;top:16px}.help-quick b{font-size:26px}.help-quick small{font-size:11px}.help-quick em{font-size:10px}
+ .help-contacts-link{padding:17px 13px;gap:10px;flex-wrap:wrap;position:relative}.help-contacts-link>span:nth-child(2){padding-right:20px}.help-contacts-link small{font-size:10px}.help-count{margin-left:46px;font-size:9px}.help-contacts-link>svg{position:absolute;right:15px;top:26px}.help-note{font-size:9px}
+ .help-call{padding:16px 13px;gap:10px;flex-wrap:wrap}.help-call .help-icon{width:31px;height:31px}.help-call b{font-size:13px}.help-call small{font-size:10px}.help-call-number{font-size:12px;order:4;flex-basis:100%;padding-left:41px}.help-call>svg{width:15px;height:15px}.help-call.em .help-call-number{flex-basis:auto;order:0;padding:0;font-size:16px}.help-detail{padding-top:13px}.help-detail .help-heading{padding-top:12px}
+ .help-empty{flex-wrap:wrap;padding:16px;gap:10px}.help-empty p{font-size:11px}.help-empty p>span{font-size:10px}.app.helping .help-empty .btn{margin-left:46px;flex-basis:calc(100% - 46px)}.help-text{font-size:11px;padding:12px}
+ .help-wait-grid{grid-template-columns:1fr;gap:16px}.app.helping .help-wait-grid .card{padding:22px}.app.helping .help-saved{padding:14px 16px}.help-saved .row>.help-icon{display:none}.app.helping .help-contact-form{margin-top:16px}
+}
+@media(max-width:350px){.help-quick-grid{grid-template-columns:1fr}.help-quick{min-height:0;flex-wrap:nowrap;padding:17px}.help-quick>span:nth-child(2){flex:1}.help-quick>svg{position:static}}
