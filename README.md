@@ -1,6 +1,6 @@
 # Safe Space
 
-A working login backend connected to the supplied Safe Space page. Built with Node.js 24, Express and SQLite, with a React, TypeScript and Tailwind login screen. The original HTML file is untouched; the connected copy lives in `public/`.
+A working login backend connected to the supplied Safe Space page. Built with Node.js 24, Express and SQLite, with React, TypeScript and Tailwind support for the login, journal and animated chat screens. The original HTML file is untouched; the connected copy lives in `public/`.
 
 ## Run it on Windows
 
@@ -37,7 +37,17 @@ npm.cmd run db:backup
 - Random sessions in HttpOnly, SameSite cookies; the database stores token hashes. Sessions expire after seven days by default, survive restarts, rotate on sign-in and are revoked on sign-out.
 - Persistent throttling by email and client address, request size limits, same-origin request protection, parameterized SQL and security headers.
 - Account-specific browser storage for the existing journal, contacts and coping plans. Switching accounts clears the previous account's data from the visible page and chat memory.
-- Automated authentication and journal storage tests: run `npm.cmd test`.
+- Automated authentication, journal storage and chat session tests: run `npm.cmd test`.
+
+## Chat screen
+
+Open **http://localhost:3000/#chat** after signing in. The supplied animated chat design is adapted for Safe Space in `components/ui/animated-ai-chat.tsx`: a dark glass composer, soft violet glow, animated conversation starters, message transitions, an expanding textarea and a support command menu. Animations respect reduced-motion preferences.
+
+Enter sends a message; Shift + Enter starts a new line. A suggested starter fills the composer so you can edit it before sending. Select **Shortcuts** or type `/` to open the menu, then use the arrow keys and Enter, or click a choice. `/breathe` and `/ground` open the existing coping exercises, `/journal` opens your journal, and `/help` opens Help Now. The send button also runs a selected slash command.
+
+Conversations and unfinished chat drafts survive navigation during the current page session. They are cleared on sign-out or account changes, and are not stored in SQLite or browser storage. The existing host AI integration can stream replies when available. In a normal browser without that integration, the page clearly labels the existing guided fallback replies. Pending replies have a typing indicator and a timeout; late replies from a previous account are ignored. Risk phrases still show the original support notice with tappable emergency and support numbers.
+
+The design reference's command examples are adapted to the actual support tools. Attachment uploads and design-generation actions are outside this integration. Local checks cover message sending, multiline input, mobile layout and shortcut navigation; automated tests exercise streaming with a mock provider, fallback replies, timeout recovery and account isolation.
 
 ## Journal screen
 

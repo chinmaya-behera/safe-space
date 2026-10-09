@@ -52,6 +52,8 @@ declare global {
     safeSpaceUI: {
       setAccount(user: Account | null): void;
       showStatus(message: string): void;
+      navigate(view: 'help' | 'cope' | 'jour'): void;
+      openCoping(id: string): void;
     };
   }
 }

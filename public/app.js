@@ -10,7 +10,7 @@ const careHTML=`<div class="care"><b>Thank you for sharing this. That took coura
 
 /* ---------- navigation ---------- */
 const views={help:helpHome,cope:copeHome,jour:jourWrite};
-function go(v){stop();window.safeSpaceJournal?.unmount();document.querySelector('.app').classList.toggle('journaling',v==='jour');if(accountScope)history.replaceState(null,'',location.pathname+(v==='jour'?'#journal':''));$('chat').classList.remove('open');document.querySelector('.app').classList.remove('chatting');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));views[v]();main.scrollTop=0}
+function go(v){stop();window.safeSpaceChat?.hide();window.safeSpaceJournal?.unmount();document.querySelector('.app').classList.toggle('journaling',v==='jour');if(accountScope)history.replaceState(null,'',location.pathname+(v==='jour'?'#journal':''));$('chat').classList.remove('open');document.querySelector('.app').classList.remove('chatting');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));views[v]();main.scrollTop=0}
 document.querySelectorAll('nav button[data-v]').forEach(b=>b.onclick=()=>go(b.dataset.v));
 
 /* ---------- HELP NOW ---------- */
@@ -99,20 +99,15 @@ Draw on broad understanding of emotional pain: loneliness, grief, trauma, bullyi
 Style: short replies (2-5 sentences), plain warm language, no lists or lectures. First reflect and validate, then gently offer ONE small thing: a question, a grounding idea, reaching out to one trusted person, or a tiny next step. Ask one question at a time. Never be dismissive, never say "just think positive", never say their wish to die is reasonable. You may mention the app's Coping Library, Journal or Help Now tabs when useful.
 Safety: if they mention suicide, self-harm, a plan, or hopelessness, respond calmly and directly: thank them for telling you, say you care, ask plainly whether they are thinking of ending their life and whether they are safe right now, gently encourage them to call Tele-MANAS 14416 or 112 (India) or a trusted person, and suggest moving away from anything they could use to hurt themselves. Never give methods or details of self-harm. Stay with them; do not end the conversation abruptly.
 Respond only with your message to the person.`;
-const log=$('log'),ct=$('ct'),cs=$('cs'),hist=[];let sample=null,busy=false,started=false,chatGeneration=0;
-function add(t,c){const d=document.createElement('div');d.className='m '+c;d.textContent=t;log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
-async function openChat(){stop();document.querySelector('.app').classList.remove('journaling');$('chat').classList.add('open');document.querySelector('.app').classList.add('chatting');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.id==='chatnav'));if(!started){started=true;add('Heyy 💙 how was your day?','bot');try{sample=await claude.use('sample')}catch(e){sample=null}}ct.focus()}
-$('chatnav').onclick=openChat;$('cx').onclick=()=>go('help');
-const FB=["Thank you for sharing that with me. It sounds really heavy. Do you want to tell me more about what's been weighing on you?","I'm here and listening. What part of this is hurting the most right now?","That sounds really hard, and your feelings make sense. Is there one person you trust that you could reach out to today?"];
-async function send(){const generation=chatGeneration;const v=ct.value.trim();if(!v||busy)return;ct.value='';add(v,'me');hist.push({role:'user',content:v});busy=true;cs.disabled=true;
- if(RISK.test(v))add("You're not alone, and your life matters. If you're in danger right now, please call 112. You can also talk to a trained person any time, free: Tele-MANAS 14416 (24/7), iCall 9152987821, or AASRA +91-9820466726. You can also tap Help Now below.",'crisis');
- const b=add('…','bot');let r;
- try{if(!sample)throw 0;const msgs=[{role:'user',content:SYSTEM+"\n\n(Conversation begins. You already asked: 'Heyy how was your day?')"},{role:'assistant',content:"Understood. I'll respond warmly and safely."},...hist.slice(-20)];
-  const x=await sample(msgs,{cache:false,onText:({text})=>{if(generation!==chatGeneration)return;b.textContent=text;log.scrollTop=log.scrollHeight}});r=x.text}catch(e){r=FB[hist.length%3]}
- if(generation!==chatGeneration)return;
- b.textContent=r;hist.push({role:'assistant',content:r});busy=false;cs.disabled=false;ct.focus();log.scrollTop=log.scrollHeight}
-cs.onclick=send;ct.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
-
+window.safeSpaceChatContext={system:SYSTEM,isRisk:text=>RISK.test(text)};
+function openChat(){
+ stop();window.safeSpaceJournal?.unmount();document.querySelector('.app').classList.remove('journaling');
+ $('chat').classList.add('open');document.querySelector('.app').classList.add('chatting');
+ if(accountScope)history.replaceState(null,'',location.pathname+'#chat');
+ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.id==='chatnav'));
+ window.safeSpaceChat?.open();
+}
+$('chatnav').onclick=openChat;
 go('help');
 setTimeout(()=>{const sp=$('splash');if(!sp)return;sp.classList.add('hide');setTimeout(()=>sp.remove(),800)},2600);
 
@@ -122,17 +117,19 @@ for(let k=0;k<18;k++){const b=document.createElement('div');b.className='sp-b';c
 
 function loadAccountData(userId){
  stop();window.safeSpaceJournal?.unmount();accountScope=userId;C=st.get('hn_contacts',[]);mem=readJournal('journal_entries');journalTrash=readJournal('journal_trash');journalDraft={mood:null,tx:'',gd:''};
- chatGeneration++;hist.length=0;log.replaceChildren();ct.value='';busy=false;cs.disabled=false;started=false;sample=null;
+ window.safeSpaceChat?.reset();
 }
 
 window.safeSpaceUI={
  setAccount(user){
   const panel=$('login'),app=document.querySelector('.app');
-  $('splash')?.remove();loadAccountData(user?.id||null);go(user&&location.hash==='#journal'?'jour':'help');
+  $('splash')?.remove();loadAccountData(user?.id||null);if(user&&location.hash==='#chat')openChat();else go(user&&location.hash==='#journal'?'jour':'help');
   document.querySelector('header b').textContent=user?'💙 Hi, '+user.name:'💙 Safe Space';
   panel.classList.toggle('show',!user);app.inert=!user;
   if(user)app.removeAttribute('aria-hidden');else app.setAttribute('aria-hidden','true');
   $('auth-status').hidden=true;
  },
- showStatus(message){$('auth-status').textContent=message;$('auth-status').hidden=false}
+ showStatus(message){$('auth-status').textContent=message;$('auth-status').hidden=false},
+navigate:go,
+openCoping(id){go('cope');main.querySelector('[data-id='+id+']')?.click()}
 };

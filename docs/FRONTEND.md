@@ -11,10 +11,13 @@ The project now supports React, TypeScript, Tailwind CSS and the shadcn componen
 | `components/auth-panel.tsx` | Backend integration, session restoration and sign-out |
 | `components/journal-panel.tsx` | Writing, moods, prompts, archive and recoverable deletion |
 | `components/ui/journal-scroll-map.tsx` | Animated scroll marker and section preview cards |
+| `components/ui/animated-ai-chat.tsx` | Animated chat composer, transcript and support command menu |
+| `lib/chat-session.ts` | Page-memory conversation state, host AI streaming and guided fallback |
 | `lib/journal.ts` | Journal types and shared section, mood and prompt definitions |
 | `frontend/main.tsx` | Login mount and journal mount/unmount bridge |
 | `frontend/styles.css` | Tailwind imports and login styles |
 | `frontend/journal.css` | Scoped journal theme, responsive layout and animations |
+| `frontend/chat.css` | Scoped dark chat surface, responsive composer and motion styles |
 | `lib/auth-client.ts` | Typed API requests and account data |
 | `lib/utils.ts` | shadcn-style class merging utility |
 | `components.json` | shadcn aliases and style configuration |
@@ -57,6 +60,18 @@ The journal mounts inside the existing app's main panel. `public/app.js` supplie
 Navigation unmounts the React journal before replacing the main panel. Drafts stay in page memory across navigation and are cleared when the account changes. The journal retains the existing risk-phrase and very-low-mood support message. `#journal` opens the journal after session restoration; the other screens keep their existing styling.
 
 The journal's moon/sun button stores its account-specific preference under `journal_theme`. The initial preference follows the app/device theme. A scoped `data-journal-theme` attribute applies colors to the active journal, header, navigation, writing surfaces and preview cards; it is removed when the component unmounts. Other support screens keep their existing theme.
+
+## Animated chat integration
+
+The supplied `AnimatedAIChat` component is adapted in `components/ui/animated-ai-chat.tsx` with a typed session and close callback. Framer Motion is installed for entry, hover and menu transitions; CSS handles the ambient glow and typing dots. `useReducedMotion` and a matching media query disable movement when requested. Textarea resizing uses a bounded height and cleans up its resize listener. Scroll following stops while the person reads older messages.
+
+The persistent React root inside `#chat-root` subscribes to `lib/chat-session.ts` with `useSyncExternalStore`. The legacy navigation bridge supplies support shortcuts and the original support prompt and risk matcher. `#chat` restores this view after sign-in. The journal root unmounts when chat opens, while the journal draft stays in page memory.
+
+Opening chat initializes the existing `window.claude.use('sample')` host integration if available. Messages use that provider's streaming callback, or the original guided replies when it is unavailable. The UI shows which mode is active. The session guards duplicate sends, empty input, provider failures and 30-second deadlines. Resetting on account changes invalidates provider initialization, streams and final responses from the previous account. It never persists conversation text or drafts.
+
+Support commands open real app tools instead of the reference's UI-generation demos. Conversation starters fill an editable draft. Enter sends, Shift + Enter adds a line, and composing IME input is protected. The command menu supports arrow keys, Enter and Escape, plus pointer selection. Attachment and mock-upload controls are omitted because file handling is not configured.
+
+`test/chat.test.js` covers page-memory continuity, concurrent-send protection, streaming, immediate support notices, provider and reply races across accounts, fallback recovery, timeouts and draft limits. Local browser checks cover the UI in desktop, phone and short phone viewports. Streaming is tested with a mock provider because the local browser has no host AI integration. Animation API reference: [Motion for React](https://motion.dev/docs/react-animation), [reduced motion](https://motion.dev/docs/react-use-reduced-motion).
 
 Scroll updates are batched with animation frames. Resize and intersection observers track layout and reveal sections, and all observers, listeners and scheduled work are cleaned up when the journal unmounts. The scroll range and section shortcuts support keyboard navigation; previews work on focus as well as hover. Reduced-motion styles disable decorative animation and section jumps use immediate scrolling.
 
