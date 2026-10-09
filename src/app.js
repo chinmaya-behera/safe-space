@@ -183,6 +183,10 @@ export async function createApp({ db, config }) {
   });
 
   app.use('/api', (req, res) => res.status(404).json({ error: 'API endpoint not found.' }));
+  app.get(['/login', '/signup'], (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.sendFile(path.join(projectRoot, 'public', 'index.html'));
+  });
   app.use(express.static(path.join(projectRoot, 'public'), { dotfiles: 'deny', etag: false, maxAge: 0 }));
   app.use((req, res) => res.status(404).type('text').send('Page not found.'));
   app.use((error, req, res, next) => {

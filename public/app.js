@@ -107,7 +107,7 @@ async function send(){const generation=chatGeneration;const v=ct.value.trim();if
 cs.onclick=send;ct.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
 
 go('help');
-setTimeout(()=>{const sp=$('splash');sp.classList.add('hide');setTimeout(()=>sp.remove(),800)},2600);
+setTimeout(()=>{const sp=$('splash');if(!sp)return;sp.classList.add('hide');setTimeout(()=>sp.remove(),800)},2600);
 
 (function(){const sp=document.getElementById('splash');if(!sp)return;const cols=['#ffd1dc','#c7f9cc','#bde0fe','#fff1a8','#e0c3fc'];
 for(let k=0;k<18;k++){const b=document.createElement('div');b.className='sp-b';const z=14+Math.random()*46;b.style.cssText=`width:${z}px;height:${z}px;left:${Math.random()*100}%;background:${cols[k%5]}66;animation-duration:${3+Math.random()*4}s;animation-delay:${Math.random()*2}s`;sp.appendChild(b)}})();
@@ -117,3 +117,15 @@ function loadAccountData(userId){
  stop();accountScope=userId;C=st.get('hn_contacts',[]);mem=st.get('journal_entries',[]);mood=null;
  chatGeneration++;hist.length=0;log.replaceChildren();ct.value='';busy=false;cs.disabled=false;started=false;sample=null;
 }
+
+window.safeSpaceUI={
+ setAccount(user){
+  const panel=$('login'),app=document.querySelector('.app');
+  $('splash')?.remove();loadAccountData(user?.id||null);go('help');
+  document.querySelector('header b').textContent=user?'💙 Hi, '+user.name:'💙 Safe Space';
+  panel.classList.toggle('show',!user);app.inert=!user;
+  if(user)app.removeAttribute('aria-hidden');else app.setAttribute('aria-hidden','true');
+  $('auth-status').hidden=true;
+ },
+ showStatus(message){$('auth-status').textContent=message;$('auth-status').hidden=false}
+};

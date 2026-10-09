@@ -5,30 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Safe Space</title>
 <link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/auth/auth.css">
 </head>
 <body>
 <div id="splash"><div class="sp-orb"><i></i><i></i><i></i><em>💙</em></div><div class="sp-t"><span style="animation-delay:.3s">Safe</span><span style="animation-delay:.6s">Space</span></div><div class="sp-s">You are not alone.</div></div>
-<div id="login" class="show"><form class="lg" id="lgform" novalidate>
-<div class="lg-top"><em>💙</em><h2>Welcome to Safe Space</h2><p id="lgsubtitle">Sign in to your Safe Space account</p></div>
-<div class="lg-body">
-<div class="auth-switch" aria-label="Account options"><button type="button" id="signin-tab" aria-pressed="true">Sign in</button><button type="button" id="signup-tab" aria-pressed="false">Create account</button></div>
-<div id="name-field" hidden><label for="lgn">Your name or nickname</label><input id="lgn" autocomplete="nickname" maxlength="40" placeholder="e.g. Alex"></div>
-<label for="lge">Email</label><input id="lge" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com" required>
-<label for="lgpassword">Password</label><input id="lgpassword" type="password" autocomplete="current-password" maxlength="128" placeholder="Your password" required>
-<div id="confirm-field" hidden><label for="lgconfirm">Confirm password</label><input id="lgconfirm" type="password" autocomplete="new-password" maxlength="128" placeholder="Enter your password again"><p class="meta">Use 12–128 characters. A long, unique passphrase works well.</p></div>
-<div id="signup-terms" hidden>
-<label>Terms &amp; Conditions</label>
-<div class="terms"><b>1. What this app is.</b> Safe Space offers coping tools, a journal and a peer-support chatbot. It is not a licensed therapist, doctor or crisis service, and it cannot diagnose or treat anything.<br><b>2. Emergencies.</b> If you or someone else is in danger, call 112 right away. Free 24/7 support in India: Tele-MANAS 14416.<br><b>3. Your data.</b> Your account name, email, password hash, consent record and sessions are stored in the server database. Your journal, trusted contacts and coping plans stay in this browser under your account. They are not encrypted; clearing browser data removes them. Chat messages may be processed to generate replies when an AI integration is available.<br><b>4. Your responsibility.</b> Use the app kindly and lawfully, and reach out to people you trust and to professionals when you need more support.<br><b>5. Age.</b> You must be 18 or older, or have a parent or guardian's permission.</div>
-<label class="tc" id="t1"><input type="checkbox"><i>✓</i><span>I understand Safe Space is peer support only and <b>not a replacement</b> for professional care.</span></label>
-<label class="tc" id="t2"><input type="checkbox"><i>✓</i><span>I understand this is <b>not an emergency service</b> and I will call <b>112</b> or <b>Tele-MANAS 14416</b> if I am in danger.</span></label>
-<label class="tc" id="t3"><input type="checkbox"><i>✓</i><span>I am 18+ (or have permission) and I <b>agree to the Terms &amp; Conditions</b> and the data storage described above.</span></label>
-<div class="prog"><div id="lgp"></div></div>
-</div>
-<p id="lgmsg" role="status" aria-live="polite">Connecting to Safe Space…</p>
-<button class="btn" id="lgbtn" type="submit" disabled>Sign in &amp; continue</button>
-<button class="btn alt" id="auth-retry" type="button" hidden>Try connection again</button>
-<p class="lg-note">🔒 Your account is saved on the server. Journal entries stay in this browser.</p>
-</div></form></div>
+<div id="login" class="show"><div id="auth-root"><p class="auth-loading" role="status">Connecting to Safe Space…</p></div></div>
 <div class="app" inert aria-hidden="true">
 <header><button id="so" type="button">Sign out</button><b>💙 Safe Space</b><span>Support tools for hard moments. Not a replacement for professional care.</span></header>
 <p class="care" id="auth-status" role="status" hidden></p>
@@ -47,6 +28,6 @@
 </nav>
 </div>
 <script src="/app.js" defer></script>
-<script src="/auth.js" defer></script>
+<script type="module" src="/auth/auth.js"></script>
 </body>
 </html>

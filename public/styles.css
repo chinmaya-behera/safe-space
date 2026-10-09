@@ -174,42 +174,12 @@ nav button#chatnav span{animation:wiggle 3.5s ease-in-out infinite}
 .app.chatting main{display:none}
 #chat.open{animation:up .45s cubic-bezier(.2,.9,.3,1) both}
 
-/* ===== LOGIN + TERMS ===== */
-#login{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;padding:16px;overflow-y:auto;background:linear-gradient(160deg,#eef2ff,#fdf2f8 50%,#ecfdf5)}
-#login.show{display:flex}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #login{background:linear-gradient(160deg,#181a2e,#241a2e 50%,#12262a)}}
-:root[data-theme="dark"] #login{background:linear-gradient(160deg,#181a2e,#241a2e 50%,#12262a)}
-.lg{width:100%;max-width:440px;margin:auto;background:var(--card);border-radius:28px;box-shadow:0 20px 50px rgba(106,130,251,.3);overflow:hidden;animation:up .6s cubic-bezier(.2,.9,.3,1) both}
-.lg-top{background:linear-gradient(120deg,#6a82fb,#b06ab3,#fc5c7d,#6a82fb);background-size:300% 100%;animation:shift 10s linear infinite;color:#fff;text-align:center;padding:26px 20px 22px}
-.lg-top em{font-style:normal;font-size:46px;display:block;animation:beat 1.8s ease-in-out infinite}
-.lg-top h2{margin:6px 0 2px;font-size:25px}.lg-top p{margin:0;font-size:14px;opacity:.92}
-.lg-body{padding:18px 20px 22px}
-.lg-body label{margin:12px 0 5px}
-.terms{max-height:130px;overflow-y:auto;background:var(--soft);border-radius:14px;padding:10px 13px;font-size:13px;line-height:1.5;color:var(--mute);margin-top:6px}
-.terms b{color:var(--ink)}
-.tc{display:flex;gap:11px;align-items:flex-start;padding:10px 12px;margin-top:9px;border-radius:14px;border:2px solid transparent;background:var(--soft);cursor:pointer;font-size:14px;line-height:1.4;transition:background .25s,border-color .25s,transform .2s}
-.tc:hover{transform:translateX(3px)}
-.tc input{position:absolute;opacity:0;width:0;height:0}
-.tc i{flex:none;width:24px;height:24px;border-radius:8px;border:2px solid var(--mute);display:flex;align-items:center;justify-content:center;color:transparent;font-style:normal;font-weight:800;font-size:15px;transition:all .3s cubic-bezier(.3,1.8,.5,1)}
-.tc.ok{background:color-mix(in srgb,var(--grn) 14%,transparent);border-color:var(--grn)}
-.tc.ok i{background:var(--grn);border-color:var(--grn);color:#fff;transform:scale(1.15) rotate(360deg)}
-.tc:focus-within{box-shadow:0 0 0 3px rgba(106,130,251,.35)}
-.prog{height:8px;border-radius:8px;background:var(--soft);margin-top:14px;overflow:hidden}
-.prog div{height:100%;width:0;background:linear-gradient(90deg,#6a82fb,#43cea2);border-radius:8px;transition:width .5s cubic-bezier(.2,.9,.3,1.2)}
-#lgmsg{font-size:13px;color:var(--mute);text-align:center;margin:6px 0 0;min-height:20px}
-#lgbtn{width:100%;margin-top:6px;padding:14px;font-size:17px;font-weight:700}
-#lgbtn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;transform:none;background:var(--mute)}
-#lgbtn:not(:disabled){animation:sospulse2 2s ease-in-out infinite}
-@keyframes sospulse2{0%,100%{box-shadow:0 0 0 0 rgba(106,130,251,.5)}50%{box-shadow:0 0 0 12px rgba(106,130,251,0)}}
-.lg-note{font-size:12px;color:var(--mute);text-align:center;margin-top:10px}
+/* Login shell; React component styles live in frontend/styles.css. */
+#login{position:fixed;inset:0;z-index:90;display:none;overflow-y:auto;overscroll-behavior:contain;background:#121212}
+#login.show{display:block}
+body:has(#login.show) #splash{display:none}
+.auth-loading{color:#a1a1aa;text-align:center;margin:40vh 0 0;font-size:14px}
 header{position:relative}
 #so{position:absolute;right:14px;top:14px;background:rgba(255,255,255,.22);color:#fff;border:0;border-radius:16px;padding:5px 12px;font:inherit;font-size:12px;cursor:pointer;transition:background .2s,transform .2s}
 #so:hover{background:rgba(255,255,255,.38);transform:scale(1.06)}
-.shake{animation:shk .4s}
-@keyframes shk{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
-
-.lg-body [hidden],[hidden]{display:none!important}
-.auth-switch{display:flex;gap:8px;padding:4px;border-radius:18px;background:var(--soft)}
-.auth-switch button{flex:1;border:0;border-radius:14px;background:transparent;color:var(--mute);padding:10px;font:inherit;cursor:pointer}
-.auth-switch button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.1);font-weight:700}
-.auth-switch button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+[hidden]{display:none!important}

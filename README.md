@@ -1,6 +1,6 @@
 # Safe Space
 
-A working login backend connected to the supplied Safe Space page. Built with Node.js 24, Express and SQLite. The original HTML file is untouched; the connected copy lives in `public/`.
+A working login backend connected to the supplied Safe Space page. Built with Node.js 24, Express and SQLite, with a React, TypeScript and Tailwind login screen. The original HTML file is untouched; the connected copy lives in `public/`.
 
 ## Run it on Windows
 
@@ -13,7 +13,9 @@ npm.cmd run db:init
 npm.cmd start
 ```
 
-Visit **http://localhost:3000**, select **Create account**, enter a name, email and password, and accept the three statements. After that, use **Sign in**. Press Ctrl+C in the terminal to stop the server. Open the page through the server URL; double-clicking `index.html` will not connect to the backend.
+Visit **http://localhost:3000**, select **Create an account**, enter a name, email and password, and accept the three statements. After that, use **Sign in**. You can open **http://localhost:3000/login** or **/signup** directly to view either form, including while another tab is signed in. Press Ctrl+C in the terminal to stop the server. Open the page through the server URL; double-clicking `index.html` will not connect to the backend.
+
+`npm.cmd start` builds the login component automatically. Use `npm.cmd run dev` while editing to rebuild the React screen and restart the backend when files change; refresh the page after editing. To check TypeScript and build without starting the server, use `npm.cmd run build`.
 
 Node.js 24 is required. This project uses the SQLite module bundled with Node 24; that release can print an experimental-module warning.
 
@@ -36,6 +38,12 @@ npm.cmd run db:backup
 - Persistent throttling by email and client address, request size limits, same-origin request protection, parameterized SQL and security headers.
 - Account-specific browser storage for the existing journal, contacts and coping plans. Switching accounts clears the previous account's data from the visible page and chat memory.
 - Automated authentication tests: run `npm.cmd test`.
+
+## Login component
+
+The supplied dark glass-card design is integrated in `components/ui/modern-stunning-sign-in.tsx` and branded for Safe Space. It uses the real backend instead of a demo alert, and includes a matching registration form, accessible labels, keyboard submission, a password visibility toggle and loading/error states. Google sign-in and social-proof counts are omitted because no Google provider or verified user counts are configured.
+
+The shadcn-compatible `components.json`, `@/` alias, `lib/utils.ts`, TypeScript configuration and Tailwind Vite plugin are already configured. Shared UI components belong in `components/ui/`; keeping this path consistent lets imported components and the shadcn CLI resolve the same aliases. Login styles are in `frontend/styles.css`. Tailwind's global reset is omitted to preserve the existing support screens. See [frontend setup details](docs/FRONTEND.md).
 
 The database stores accounts, consent and sessions. Journal entries, contacts and coping plans remain in browser storage and are **not encrypted or synced**. Browser storage isolation prevents ordinary account switching from showing another account's entries; anyone with access to the browser profile can still inspect them. Old unscoped browser entries from the supplied demo are not automatically assigned to a new account.
 

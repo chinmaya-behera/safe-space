@@ -1,4 +1,5 @@
 node_modules/
+public/auth/
 .env
 .env.*
 !.env.example

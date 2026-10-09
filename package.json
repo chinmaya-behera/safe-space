@@ -9,14 +9,32 @@
   },
   "scripts": {
     "start": "node --env-file-if-exists=.env src/server.js",
-    "dev": "node --env-file-if-exists=.env --watch src/server.js",
+    "dev": "npm run build && concurrently -k \"vite build --watch\" \"node --env-file-if-exists=.env --watch src/server.js\"",
     "test": "node --test",
     "db:init": "node --env-file-if-exists=.env scripts/database.js init",
     "db:status": "node --env-file-if-exists=.env scripts/database.js status",
-    "db:backup": "node --env-file-if-exists=.env scripts/database.js backup"
+    "db:backup": "node --env-file-if-exists=.env scripts/database.js backup",
+    "build": "tsc --noEmit && vite build",
+    "prestart": "npm run build"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
     "express": "^5.2.1",
-    "helmet": "^8.3.0"
+    "helmet": "^8.3.0",
+    "lucide-react": "^1.54.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwind-merge": "^3.7.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^26.6.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "concurrently": "^10.0.6",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4"
   }
 }

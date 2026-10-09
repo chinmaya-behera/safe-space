@@ -1,0 +1,104 @@
+/* Skip Tailwind's global reset to preserve the existing support screens. */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities) important;
+@source "../components";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card-background);
+  --color-card-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--muted);
+  --color-accent-foreground: var(--foreground);
+  --color-border: var(--border);
+  --color-input: var(--border);
+  --color-ring: var(--ring);
+  --color-destructive: #fca5a5;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+#auth-root {
+  --background: #121212;
+  --foreground: #f5f5f5;
+  --card-background: #1d1d1f;
+  --primary: #e4e4e7;
+  --primary-foreground: #18181b;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --border: #ffffff1a;
+  --ring: #a1a1aa;
+  --radius: 0.75rem;
+  width: 100%;
+  min-height: 100%;
+  color: var(--foreground);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.5;
+}
+
+#auth-root *, #auth-root *::before, #auth-root *::after { box-sizing: border-box; }
+#auth-root h1 { background: none; color: #fafafa; -webkit-text-fill-color: currentColor; }
+.ss-auth-page {
+  background: radial-gradient(ellipse at 48% 37%, #23232955, transparent 65%), #121212;
+  isolation: isolate;
+}
+.ss-auth-card {
+  background: linear-gradient(115deg, #ffffff0d, #ffffff02 65%);
+  border: 1px solid #ffffff0b;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 24px 70px #00000040, inset 0 1px 0 #ffffff05;
+  animation: ss-auth-arrive 450ms ease-out both;
+}
+.ss-auth-logo {
+  color: #ededf2;
+  background: linear-gradient(145deg, #ffffff29, #ffffff10);
+  border: 1px solid #ffffff14;
+  box-shadow: 0 6px 18px #00000026;
+}
+#auth-root .ss-auth-input {
+  min-height: 46px;
+  margin: 0;
+  padding: 13px 16px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: #ffffff0d;
+  color: #f5f5f5;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 160ms, background 160ms, box-shadow 160ms;
+}
+#auth-root .ss-auth-input::placeholder { color: #a6a6af; }
+#auth-root .ss-auth-input:focus { border-color: #ffffff40; background: #ffffff12; box-shadow: 0 0 0 3px #ffffff0a; }
+#auth-root .ss-auth-input:disabled { opacity: .55; }
+#auth-root .ss-auth-password { padding-right: 48px; }
+#auth-root button { font-family: inherit; cursor: pointer; }
+#auth-root button:disabled { cursor: wait; }
+#auth-root .ss-auth-eye { border: 0; padding: 0; background: transparent; color: #8c8c96; border-radius: 12px; }
+#auth-root .ss-auth-eye:hover { color: #f5f5f5; }
+#auth-root .ss-auth-submit { min-height: 48px; border: 1px solid #ffffff08; color: #fafafa; background: #ffffff17; transition: background 160ms, border-color 160ms; }
+#auth-root .ss-auth-submit:hover:not(:disabled) { background: #ffffff25; border-color: #ffffff15; }
+#auth-root .ss-auth-submit:disabled { opacity: .5; }
+#auth-root .ss-auth-link { padding: 0; border: 0; background: none; color: #d4d4d8; font: inherit; text-decoration: underline; text-underline-offset: 3px; transition: color 160ms; }
+#auth-root .ss-auth-link:hover { color: white; }
+#auth-root button:focus-visible, #auth-root a:focus-visible, #auth-root summary:focus-visible { outline: 2px solid #b4b4be; outline-offset: 4px; }
+#auth-root .ss-auth-consent { margin: 0; }
+#auth-root .ss-auth-consent input {
+  width: 15px;
+  height: 15px;
+  margin: 2px 0 0;
+  padding: 0;
+  flex: none;
+  accent-color: #d4d4d8;
+  cursor: pointer;
+}
+#auth-root .ss-auth-terms p { margin: 0; }
+@keyframes ss-auth-arrive { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .ss-auth-card { animation: none; } #auth-root * { transition: none; } #auth-root .animate-spin { animation: none !important; } }
