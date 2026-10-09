@@ -49,6 +49,12 @@ Conversations and unfinished chat drafts survive navigation during the current p
 
 The design reference's command examples are adapted to the actual support tools. Attachment uploads and design-generation actions are outside this integration. Local checks cover message sending, multiline input, mobile layout and shortcut navigation; automated tests exercise streaming with a mock provider, fallback replies, timeout recovery and account isolation.
 
+## Coping library
+
+Open **http://localhost:3000/#coping** after signing in. The library and all eight exercises use a monochrome charcoal-and-gray palette, rounded cards, outline icons and restrained motion to match the chat and journal layouts. The toolkit adapts to small screens; grounding and body-release exercises show step progress, and breathing keeps its expanding guide. Keyboard focus is visible and animations respect reduced-motion preferences.
+
+Breathing, grounding, the 15-minute timer, safety guidance, reaching out, body release, kind words and the saved coping plan keep their existing behavior. Coping plans remain in the same account-specific browser storage. Chat shortcuts still open breathing and grounding directly.
+
 ## Journal screen
 
 Open **http://localhost:3000/#journal** after signing in. The journal has a calm paper-style layout with animated mood choices, seven rotating prompts, lined writing space, a word count, a gratitude field and an entry archive. Use the moon/sun button beside the view tabs to switch between light and dark mode. Your choice is remembered for this account in this browser; the initial setting follows the app/device theme. The draggable scroll marker tracks your reading position; hover or focus the numbered shortcuts for floating section previews, and click them to jump between sections. Animations respect your device's reduced-motion setting.

@@ -6,6 +6,7 @@ import { createChatSession } from '@/lib/chat-session';
 import './styles.css';
 import './journal.css';
 import './chat.css';
+import './coping.css';
 
 let journalRoot: Root | null = null;
 window.safeSpaceJournal = {

@@ -1,0 +1,82 @@
+/* A monochrome companion to the chat and journal surfaces. */
+body:has(.app.coping){background:#101015!important}
+body:has(.app.coping)::before,body:has(.app.coping)::after{display:none}
+.app.coping{max-width:940px;background:#101015;color:#ededf0;color-scheme:dark;--ink:#ededf0;--mute:#a0a0a8;--acc:#d0d0d7;--soft:#25252d;--bg:#101015;--card:#19191f}
+.app.coping>header{background:#101015;color:#ededf0;border-radius:0;border-bottom:1px solid #ffffff0c;box-shadow:none;animation:none;padding:12px 24px}
+.app.coping>header b{filter:grayscale(1)}
+.app.coping>header span{color:#a0a0aa}
+.app.coping #so{background:#ffffff0c;color:#c0c0c8}
+.app.coping>.help{background:#202026;color:#c2c2ca;border:1px solid #ffffff09;border-radius:8px;box-shadow:none;margin:8px 20px 0;font-size:12px}
+.app.coping>main{padding:0 54px 28px;min-height:0;scrollbar-width:thin;scrollbar-color:#45454e transparent}
+.app.coping>main>*{animation:coping-enter .4s ease-out both}
+.app.coping>nav{background:#18181f;border:1px solid #ffffff0b;border-radius:18px;margin:0 20px 12px;box-shadow:0 6px 30px #0003;z-index:3}
+.app.coping>nav button,.app.coping>nav button#chatnav,.app.coping>nav button.sosb{color:#a5a5af;--c:#d0d0d7}
+.app.coping>nav button.on{background:#ffffff0b;color:#ededf0}
+.app.coping>nav button span{filter:grayscale(1);animation:none!important;transform:none}
+.app.coping :is(button,a,textarea):focus-visible{outline:2px solid #d0d0d7;outline-offset:4px}
+.coping-home{max-width:760px;margin:0 auto}
+.coping-heading{display:flex;align-items:center;justify-content:space-between;gap:30px;padding:35px 0 26px}
+.coping-eyebrow{display:flex;align-items:center;gap:8px;font:10px/1.5 ui-monospace,Consolas,monospace;letter-spacing:1.5px;color:#a0a0aa}
+.coping-eyebrow i{width:5px;height:5px;background:#b8b8c0;border-radius:50%}
+.app.coping h1{background:none;color:#efeff2;-webkit-text-fill-color:currentColor;font-size:clamp(32px,4vw,43px);font-weight:500;line-height:1.15;letter-spacing:-1.8px;margin:12px 0}
+.app.coping h1>span{display:block;font-size:clamp(22px,3vw,30px);color:#9999a5;font-weight:400;letter-spacing:-1.1px;margin-top:7px}
+.coping-heading p{max-width:430px;color:#a0a0aa;font-size:12px;line-height:1.8;margin:0}
+.coping-motif{width:108px;height:108px;position:relative;display:grid;place-items:center;flex-shrink:0;color:#ceced8}
+.coping-motif>i{position:absolute;inset:0;border:1px solid #ffffff14;border-radius:50%;border-top-color:#c0c0ca55;animation:coping-orbit 24s linear infinite}
+.coping-motif>i:nth-child(2){inset:14px;border-top-color:#ffffff14;border-bottom-color:#c0c0ca40;animation-direction:reverse;animation-duration:18s}
+.coping-motif>svg{width:30px;height:30px}
+.coping-grid-label{display:flex;justify-content:space-between;gap:10px;align-items:center;border-top:1px solid #ffffff0d;padding:17px 0 15px;color:#a0a0aa;font-size:10px}
+.coping-grid-label>span:first-child{font:9px ui-monospace,Consolas,monospace;letter-spacing:1.2px}
+.coping-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.app.coping .coping-tile{position:relative;margin:0;padding:16px 20px 19px;border:1px solid #ffffff0c;border-radius:16px;background:#19191f;box-shadow:0 4px 18px #00000014;color:#e5e5ec;min-height:137px;transition:background .2s,border-color .2s,transform .2s;animation:coping-enter .45s ease-out both;animation-delay:calc(var(--step)*35ms)}
+.app.coping .coping-tile:hover{background:#212128;border-color:#ffffff22;transform:translateY(-2px);box-shadow:0 6px 20px #0002}
+.app.coping .coping-tile:active{transform:translateY(0) scale(.99)}
+.app.coping .coping-tile b{color:#e5e5ec;font-size:13px;font-weight:500;letter-spacing:-.1px;line-height:1.5;margin:12px 22px 4px 0}
+.coping-tile-top{display:flex;align-items:center;justify-content:space-between}
+.coping-icon{width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid #ffffff10;border-radius:10px;background:#ffffff03;color:#c2c2ce!important}
+.app.coping .coping-number{font:9px ui-monospace,Consolas,monospace;color:#8f8f9e}
+.app.coping .coping-description{display:block;font-size:11px;line-height:1.6;color:#a0a0ac;padding-right:22px}
+.coping-arrow{position:absolute;right:18px;bottom:22px;color:#8d8d99;transition:transform .2s,color .2s}
+.coping-tile:hover .coping-arrow{transform:translateX(3px);color:#ddddE4}
+.app.coping .coping-footnote{text-align:center;margin:23px 0 5px;color:#9999a5;font-size:10px;line-height:1.8}
+.coping-exercise{max-width:620px;margin:0 auto;padding-top:23px}
+.app.coping .back{color:#b0b0bc;font-size:12px;padding:10px 0;margin-bottom:24px;transition:color .2s}
+.app.coping .back:hover{color:#efeff2}
+.coping-exercise-label{display:flex;align-items:center;gap:12px;font:9px ui-monospace,Consolas,monospace;letter-spacing:1px;color:#a0a0aa;margin-bottom:17px}
+.coping-exercise-label>span:last-child{margin-left:auto;letter-spacing:0}
+.app.coping .card{background:#19191f;border:1px solid #ffffff0e;border-radius:20px;padding:30px;margin-top:0;box-shadow:0 10px 40px #0002;overflow:visible;transition:none}
+.app.coping .card::before{display:none}
+.app.coping .card:hover{transform:none;box-shadow:0 10px 40px #0002}
+.app.coping .card h2{font-size:26px;font-weight:450;line-height:1.3;letter-spacing:-.8px;margin:0 0 14px;color:#efeff2}
+.app.coping .card p,.app.coping .card li{font-size:13px;line-height:1.9;color:#b5b5c0}
+.app.coping .card li{margin:14px 0;padding-left:5px}
+.app.coping .card :is(ul,ol){padding-left:20px;margin:23px 0}
+.app.coping .card li::marker{color:#777785}
+.app.coping .card p b{font-weight:500;color:#ddddE5}
+.app.coping .card a{color:#e0e0e6;text-underline-offset:3px}
+.app.coping .btn{border:1px solid #ffffff12;border-radius:11px;background:#d5d5dd;color:#1b1b23;font-size:12px;font-weight:550;padding:11px 22px;box-shadow:none;transition:background .2s,transform .2s;min-height:42px}
+.app.coping .btn:hover{background:#ececf0;box-shadow:none;transform:translateY(-1px)}
+.app.coping .btn.alt{background:#ffffff05;color:#c6c6d0;border-color:#ffffff17}
+.app.coping .btn.alt:hover{background:#ffffff0e}
+.app.coping .big{font:400 72px/1.5 ui-monospace,Consolas,monospace;letter-spacing:-4px;background:none;color:#e2e2e9;-webkit-text-fill-color:currentColor;margin:18px 0}
+.app.coping .orb{width:116px;height:116px;background:radial-gradient(circle at 35% 30%,#54545e,#33333e 60%,#292931);border:1px solid #ffffff26;box-shadow:0 0 0 16px #ffffff03,0 0 0 32px #ffffff02;color:#e8e8ee;opacity:1;font-size:12px;font-weight:400;margin:70px auto;transition:transform 4s ease-in-out}
+.coping-progress{display:flex;gap:6px;margin:22px 0}
+.coping-progress i{height:3px;flex:1;background:#ffffff0b;border-radius:5px;transition:background .25s}
+.coping-progress i.complete{background:#b4b4c1}
+.app.coping .card label{font-size:12px;line-height:1.7;color:#b4b4bf;margin:22px 0 9px}
+.app.coping .card textarea{background:#121218;border:1px solid #ffffff13;color:#e0e0e8;border-radius:12px;padding:14px;font-size:13px;line-height:1.8;min-height:92px}
+.app.coping .card textarea::placeholder{color:#8e8e9c}
+.app.coping .card textarea:focus{border-color:#b5b5c0;box-shadow:none}
+.app.coping .card p.meta{font-size:11px;color:#a0a0aa}
+.app.coping #ok{font-size:12px;margin-left:10px;color:#c6c6ce}
+.app.coping #o:not(.orb){white-space:pre-wrap;overflow-wrap:anywhere}
+@keyframes coping-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes coping-orbit{to{transform:rotate(360deg)}}
+@media(max-width:600px){
+ .app.coping>header{padding:10px 18px}.app.coping>header b{font-size:18px}.app.coping>.help{margin:8px 12px 0;font-size:10px}.app.coping>nav{margin:0 10px 10px}.app.coping>main{padding:0 20px 24px}
+ .coping-heading{padding:29px 0 24px;gap:12px}.coping-eyebrow{font-size:8px;letter-spacing:1px}.app.coping h1{font-size:33px}.app.coping h1>span{font-size:23px;max-width:220px;line-height:1.3}.coping-heading p{font-size:11px;max-width:255px}.coping-motif{width:64px;height:64px}.coping-motif>i:nth-child(2){inset:9px}.coping-motif>svg{width:22px;height:22px}
+ .coping-grid{gap:9px}.app.coping .coping-tile{padding:14px 13px 18px;min-height:157px;border-radius:14px}.app.coping .coping-tile b{font-size:12px;margin-right:0}.app.coping .coping-description{font-size:10px;padding-right:0}.coping-arrow{top:23px;bottom:auto;right:13px;width:14px}.app.coping .coping-number{display:none}.coping-icon{width:31px;height:31px}.coping-icon>svg{width:19px;height:19px}
+ .coping-exercise{padding-top:16px}.app.coping .back{margin-bottom:19px}.app.coping .card{padding:22px;border-radius:17px}.app.coping .card h2{font-size:23px}.app.coping .card p,.app.coping .card li{font-size:12px}.coping-exercise-label{font-size:8px;letter-spacing:.7px}.app.coping .big{font-size:62px}.app.coping .orb{width:100px;height:100px;margin:61px auto}
+}
+@media(max-width:350px){.coping-grid{grid-template-columns:1fr}.app.coping .coping-tile{min-height:130px}.coping-motif{display:none}.app.coping .coping-tile b{padding-right:15px}}
+@media(prefers-reduced-motion:reduce){.app.coping *, .app.coping *::before,.app.coping *::after{animation:none!important;transition:none!important}}
