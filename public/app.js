@@ -10,7 +10,7 @@ const careHTML=`<div class="care"><b>Thank you for sharing this. That took coura
 
 /* ---------- navigation ---------- */
 const views={help:helpHome,cope:copeHome,jour:jourWrite};
-function go(v){stop();$('chat').classList.remove('open');document.querySelector('.app').classList.remove('chatting');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));views[v]();main.scrollTop=0}
+function go(v){stop();window.safeSpaceJournal?.unmount();document.querySelector('.app').classList.toggle('journaling',v==='jour');if(accountScope)history.replaceState(null,'',location.pathname+(v==='jour'?'#journal':''));$('chat').classList.remove('open');document.querySelector('.app').classList.remove('chatting');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));views[v]();main.scrollTop=0}
 document.querySelectorAll('nav button[data-v]').forEach(b=>b.onclick=()=>go(b.dataset.v));
 
 /* ---------- HELP NOW ---------- */
@@ -63,28 +63,35 @@ function plan(c){const F=[['why','Reasons I want to stay (people, pets, hopes, e
  $('sv').onclick=()=>{c.querySelectorAll('textarea').forEach(t=>st.set('cl_'+t.dataset.k,t.value));$('ok').textContent='Saved ✓'}}
 
 /* ---------- JOURNAL ---------- */
-const MOODS=[['😞','Very low',1],['😔','Low',2],['😐','Okay',3],['🙂','Better',4],['😊','Good',5]];
-const PROMPTS=['What is weighing on me most right now?','One small thing that was a little okay today…','Someone who would care if they knew how I feel…','What I need most in this moment…','A hard moment I got through before…','What I would tell a friend who felt this way…','One tiny thing I can do for myself in the next hour…'];
-let mem=st.get('journal_entries',[]),mood=null;
-function jourTabs(on){return`<div style="display:flex;gap:8px;margin-bottom:12px"><button class="btn ${on==='w'?'':'alt'}" id="jw" style="flex:1;margin:0">Write</button><button class="btn ${on==='l'?'':'alt'}" id="jl" style="flex:1;margin:0">My entries</button></div>`}
-function jourBind(){$('jw').onclick=jourWrite;$('jl').onclick=jourList}
+let mem=[],journalTrash=[],journalDraft={mood:null,tx:'',gd:''};
+function readJournal(key){
+ const value=st.get(key,[]);
+ return Array.isArray(value)?value.filter(e=>e&&Number.isFinite(e.id)&&!Number.isNaN(new Date(e.id).getTime())&&typeof e.tx==='string'&&typeof e.gd==='string').map(e=>({...e,mood:Number.isInteger(e.mood)&&e.mood>=1&&e.mood<=5?e.mood:null})):[];
+}
 function jourWrite(){
- main.innerHTML=`<h1>My Journal</h1><p class="sub">A private place for your thoughts. Nothing leaves this device.</p>${jourTabs('w')}<div class="card" style="margin-top:0"><b>How are you feeling right now?</b><div class="moods" style="margin-top:8px">${MOODS.map(m=>`<button class="mood${mood===m[2]?' on':''}" data-m="${m[2]}"><span>${m[0]}</span><small>${m[1]}</small></button>`).join('')}</div>
- <label>Need a starting point? Tap one:</label><div>${PROMPTS.map((p,i)=>`<button class="chip" data-p="${i}">${esc(p)}</button>`).join('')}</div>
- <label for="tx">Write whatever is on your mind. No one is judging you.</label><textarea id="tx" rows="7" placeholder="Start here…"></textarea>
- <label for="gd">One thing that helped, even a little, today (optional)</label><textarea id="gd" rows="2"></textarea><button class="btn" id="sv">Save entry</button><div id="after"></div></div>`;
- jourBind();
- main.querySelectorAll('.mood').forEach(b=>b.onclick=()=>{mood=+b.dataset.m;main.querySelectorAll('.mood').forEach(x=>x.classList.toggle('on',x===b))});
- main.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{const t=$('tx');t.value+=(t.value?'\n\n':'')+PROMPTS[+b.dataset.p]+'\n';t.focus()});
- $('sv').onclick=()=>{const tx=$('tx').value.trim(),gd=$('gd').value.trim(),a=$('after');if(!tx&&!gd&&!mood){a.innerHTML='<p class="meta">Write a few words or pick a mood first.</p>';return}
-  mem.unshift({id:Date.now(),mood,tx,gd});const ok=st.set('journal_entries',mem);let h=`<p>${ok?'Saved ✓ You showed up for yourself today.':'Saved for this session, but your browser blocked permanent storage.'}</p>`;
-  if(RISK.test(tx+' '+gd)||mood===1)h+=careHTML;a.innerHTML=h;$('tx').value='';$('gd').value='';mood=null;main.querySelectorAll('.mood').forEach(x=>x.classList.remove('on'))}}
-function jourList(){const last=mem.filter(e=>e.mood).slice(0,14).reverse();let h=`<h1>My Journal</h1>${jourTabs('l')}`;
- if(last.length>1)h+=`<div class="card"><b>Your recent moods</b><div class="meta">Feelings move up and down. Low days pass.</div><div class="bars">${last.map(e=>`<div style="height:${e.mood*20}%"></div>`).join('')}</div></div>`;
- if(!mem.length)h+='<div class="card">No entries yet. Your first one can be just one sentence.</div>';
- h+=mem.map(e=>`<div class="card entry"><div class="meta">${new Date(e.id).toLocaleString([],{dateStyle:'medium',timeStyle:'short'})}${e.mood?' · '+MOODS[e.mood-1][0]+' '+MOODS[e.mood-1][1]:''}</div>${e.tx?`<p>${esc(e.tx)}</p>`:''}${e.gd?`<p class="meta">✨ Helped: ${esc(e.gd)}</p>`:''}<button class="btn alt sm" data-d="${e.id}">Delete</button></div>`).join('');
- main.innerHTML=h;jourBind();
- main.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{if(b.dataset.s){mem=mem.filter(e=>e.id!=b.dataset.d);st.set('journal_entries',mem);jourList()}else{b.dataset.s=1;b.textContent='Tap again to delete for good'}})}
+ main.innerHTML='<div id="journal-root"></div>';
+ if(!window.safeSpaceJournal){main.textContent='Journal is loading. Please refresh the page.';return}
+ window.safeSpaceJournal.mount($('journal-root'),{
+  entries:()=>mem,trash:()=>journalTrash.filter(e=>!mem.some(m=>m.id===e.id)),
+  draft:()=>journalDraft,setDraft:d=>{journalDraft=d},careHTML,
+  theme:()=>{const saved=st.get('journal_theme',null);return saved==='light'||saved==='dark'?saved:(document.documentElement.dataset.theme==='dark'||(!document.documentElement.dataset.theme&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light')},
+  setTheme:theme=>st.set('journal_theme',theme),
+  needsCare:d=>RISK.test(d.tx+' '+d.gd)||d.mood===1,
+  save(entry){const next=[entry,...readJournal('journal_entries')];if(!st.set('journal_entries',next))return false;mem=next;return true},
+  remove(id){
+   const current=readJournal('journal_entries'),entry=current.find(e=>e.id===id);if(!entry)return false;
+   const deleted=[entry,...readJournal('journal_trash').filter(e=>e.id!==id)];
+   if(!st.set('journal_trash',deleted))return false;journalTrash=deleted;
+   const next=current.filter(e=>e.id!==id);if(!st.set('journal_entries',next))return false;mem=next;return true;
+  },
+  restore(id){
+   const deleted=readJournal('journal_trash'),entry=deleted.find(e=>e.id===id);if(!entry)return false;
+   const next=[entry,...readJournal('journal_entries').filter(e=>e.id!==id)].sort((a,b)=>b.id-a.id);
+   if(!st.set('journal_entries',next))return false;mem=next;
+   journalTrash=deleted.filter(e=>e.id!==id);st.set('journal_trash',journalTrash);return true;
+  }
+ });
+}
 
 /* ---------- CHAT ---------- */
 const SYSTEM=`You are "Safe Space", a warm, gentle, non-judgmental peer-support companion for people who may be struggling emotionally or having thoughts of suicide. You are NOT a licensed therapist and never claim to be or to diagnose; you offer caring, non-professional support.
@@ -94,7 +101,7 @@ Safety: if they mention suicide, self-harm, a plan, or hopelessness, respond cal
 Respond only with your message to the person.`;
 const log=$('log'),ct=$('ct'),cs=$('cs'),hist=[];let sample=null,busy=false,started=false,chatGeneration=0;
 function add(t,c){const d=document.createElement('div');d.className='m '+c;d.textContent=t;log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
-async function openChat(){stop();$('chat').classList.add('open');document.querySelector('.app').classList.add('chatting');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.id==='chatnav'));if(!started){started=true;add('Heyy 💙 how was your day?','bot');try{sample=await claude.use('sample')}catch(e){sample=null}}ct.focus()}
+async function openChat(){stop();document.querySelector('.app').classList.remove('journaling');$('chat').classList.add('open');document.querySelector('.app').classList.add('chatting');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.id==='chatnav'));if(!started){started=true;add('Heyy 💙 how was your day?','bot');try{sample=await claude.use('sample')}catch(e){sample=null}}ct.focus()}
 $('chatnav').onclick=openChat;$('cx').onclick=()=>go('help');
 const FB=["Thank you for sharing that with me. It sounds really heavy. Do you want to tell me more about what's been weighing on you?","I'm here and listening. What part of this is hurting the most right now?","That sounds really hard, and your feelings make sense. Is there one person you trust that you could reach out to today?"];
 async function send(){const generation=chatGeneration;const v=ct.value.trim();if(!v||busy)return;ct.value='';add(v,'me');hist.push({role:'user',content:v});busy=true;cs.disabled=true;
@@ -114,14 +121,14 @@ for(let k=0;k<18;k++){const b=document.createElement('div');b.className='sp-b';c
 
 
 function loadAccountData(userId){
- stop();accountScope=userId;C=st.get('hn_contacts',[]);mem=st.get('journal_entries',[]);mood=null;
+ stop();window.safeSpaceJournal?.unmount();accountScope=userId;C=st.get('hn_contacts',[]);mem=readJournal('journal_entries');journalTrash=readJournal('journal_trash');journalDraft={mood:null,tx:'',gd:''};
  chatGeneration++;hist.length=0;log.replaceChildren();ct.value='';busy=false;cs.disabled=false;started=false;sample=null;
 }
 
 window.safeSpaceUI={
  setAccount(user){
   const panel=$('login'),app=document.querySelector('.app');
-  $('splash')?.remove();loadAccountData(user?.id||null);go('help');
+  $('splash')?.remove();loadAccountData(user?.id||null);go(user&&location.hash==='#journal'?'jour':'help');
   document.querySelector('header b').textContent=user?'💙 Hi, '+user.name:'💙 Safe Space';
   panel.classList.toggle('show',!user);app.inert=!user;
   if(user)app.removeAttribute('aria-hidden');else app.setAttribute('aria-hidden','true');

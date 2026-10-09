@@ -15,7 +15,7 @@ npm.cmd start
 
 Visit **http://localhost:3000**, select **Create an account**, enter a name, email and password, and accept the three statements. After that, use **Sign in**. You can open **http://localhost:3000/login** or **/signup** directly to view either form, including while another tab is signed in. Press Ctrl+C in the terminal to stop the server. Open the page through the server URL; double-clicking `index.html` will not connect to the backend.
 
-`npm.cmd start` builds the login component automatically. Use `npm.cmd run dev` while editing to rebuild the React screen and restart the backend when files change; refresh the page after editing. To check TypeScript and build without starting the server, use `npm.cmd run build`.
+`npm.cmd start` builds the React screens automatically. Use `npm.cmd run dev` while editing to rebuild the React screens and restart the backend when files change; refresh the page after editing. To check TypeScript and build without starting the server, use `npm.cmd run build`.
 
 Node.js 24 is required. This project uses the SQLite module bundled with Node 24; that release can print an experimental-module warning.
 
@@ -37,7 +37,15 @@ npm.cmd run db:backup
 - Random sessions in HttpOnly, SameSite cookies; the database stores token hashes. Sessions expire after seven days by default, survive restarts, rotate on sign-in and are revoked on sign-out.
 - Persistent throttling by email and client address, request size limits, same-origin request protection, parameterized SQL and security headers.
 - Account-specific browser storage for the existing journal, contacts and coping plans. Switching accounts clears the previous account's data from the visible page and chat memory.
-- Automated authentication tests: run `npm.cmd test`.
+- Automated authentication and journal storage tests: run `npm.cmd test`.
+
+## Journal screen
+
+Open **http://localhost:3000/#journal** after signing in. The journal has a calm paper-style layout with animated mood choices, seven rotating prompts, lined writing space, a word count, a gratitude field and an entry archive. Use the moon/sun button beside the view tabs to switch between light and dark mode. Your choice is remembered for this account in this browser; the initial setting follows the app/device theme. The draggable scroll marker tracks your reading position; hover or focus the numbered shortcuts for floating section previews, and click them to jump between sections. Animations respect your device's reduced-motion setting.
+
+The scroll interaction is an original implementation inspired by [Skiper UI's Anime js scrollbar](https://skiper-ui.com/v1/skiper1). It uses React, CSS transitions and browser observers; no Pro component source or additional animation dependency is required.
+
+Existing account-specific journal entries keep their original text, dates and moods. Delete moves an entry to **Recently deleted**, where it stays until restored. A blocked browser-storage write preserves your unsaved words. Drafts survive navigation during the current page session; saving is still required before refreshing or closing the page. Journal data remains in this browser, separate from the SQLite account database.
 
 ## Login component
 

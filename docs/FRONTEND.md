@@ -1,4 +1,4 @@
-# Login screen setup
+# Frontend setup
 
 The project now supports React, TypeScript, Tailwind CSS and the shadcn component directory structure. No additional initialization is required for the supplied sign-in component.
 
@@ -9,8 +9,12 @@ The project now supports React, TypeScript, Tailwind CSS and the shadcn componen
 | `components/ui/modern-stunning-sign-in.tsx` | Reusable dark sign-in and registration card |
 | `components/ui/auth-terms.tsx` | Registration terms and consent checkboxes |
 | `components/auth-panel.tsx` | Backend integration, session restoration and sign-out |
-| `frontend/main.tsx` | React mount for the login page |
+| `components/journal-panel.tsx` | Writing, moods, prompts, archive and recoverable deletion |
+| `components/ui/journal-scroll-map.tsx` | Animated scroll marker and section preview cards |
+| `lib/journal.ts` | Journal types and shared section, mood and prompt definitions |
+| `frontend/main.tsx` | Login mount and journal mount/unmount bridge |
 | `frontend/styles.css` | Tailwind imports and login styles |
+| `frontend/journal.css` | Scoped journal theme, responsive layout and animations |
 | `lib/auth-client.ts` | Typed API requests and account data |
 | `lib/utils.ts` | shadcn-style class merging utility |
 | `components.json` | shadcn aliases and style configuration |
@@ -45,3 +49,15 @@ If copying this component into a different, unconfigured project, follow the off
 The pasted reference component provides the dark background, glass card, rounded fields, restrained button and account-switching link. Safe Space keeps its own brand and storage information. Local Lucide icons replace third-party logos and image assets; no remote images or unsupported user-count claims are needed. The form calls the existing account APIs, including all required registration consents.
 
 Google sign-in requires OAuth configuration and backend work before a working Google button can be added. Email verification and password recovery remain outside this update.
+
+## Journal integration
+
+The journal mounts inside the existing app's main panel. `public/app.js` supplies an adapter for the same account-specific `journal_entries` storage key and original `{id, mood, tx, gd}` entry format. Deleted entries use the account-specific `journal_trash` key. Copying to trash happens before removing an entry from the active list, and restoration writes the active entry before removing its safety copy. Each write reads current storage so a stale tab doesn't discard entries saved by another tab.
+
+Navigation unmounts the React journal before replacing the main panel. Drafts stay in page memory across navigation and are cleared when the account changes. The journal retains the existing risk-phrase and very-low-mood support message. `#journal` opens the journal after session restoration; the other screens keep their existing styling.
+
+The journal's moon/sun button stores its account-specific preference under `journal_theme`. The initial preference follows the app/device theme. A scoped `data-journal-theme` attribute applies colors to the active journal, header, navigation, writing surfaces and preview cards; it is removed when the component unmounts. Other support screens keep their existing theme.
+
+Scroll updates are batched with animation frames. Resize and intersection observers track layout and reveal sections, and all observers, listeners and scheduled work are cleaned up when the journal unmounts. The scroll range and section shortcuts support keyboard navigation; previews work on focus as well as hover. Reduced-motion styles disable decorative animation and section jumps use immediate scrolling.
+
+Run `npm.cmd test` for storage failure, existing-data compatibility, cross-tab preservation, delete/restore and support-trigger checks, alongside the authentication suite. The UI was also checked in a separate browser preview profile for saving, refresh persistence, restoration, prompts and mobile layout.
